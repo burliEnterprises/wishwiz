@@ -1,0 +1,27 @@
+body {
+    background: #F7F7F7;
+    width: 350px;
+    height:350px;
+    margin: 16px 16px 16px 16px;
+}
+
+.logo {
+    max-width: 50%;
+}
+
+.headline_ {
+    color: #7A7F81 !important;
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding-top: 8px;
+}
+
+.priceinput {
+    margin-top: 24px;
+    text-align: center;
+}
+
+.btn-unlock {
+    margin-top: 16px;
+}

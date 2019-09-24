@@ -7,3 +7,6 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }, false);
   }, false);
+
+
+// https://stackoverflow.com/questions/19758028/chrome-extension-get-dom-content
