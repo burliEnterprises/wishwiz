@@ -22,6 +22,9 @@
         "js": [
             "src/js/content.js",
             "src/js/jquery.min.js"
+        ],
+        "css": [
+            "src/css/style.css"
         ]
     }],
     "web_accessible_resources": [
