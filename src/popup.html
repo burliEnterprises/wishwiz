@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>The WishWiz</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+
+</head>
+
+<body>
+    <!-- Modal -->
+    <div class="modal fade" id="esketitBtn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">
+                        <img src="icons/icon48.png">
+                        The WishWiz
+                    </h4>
+                </div>
+                <div class="modal-body center-block">
+                    <p>Please wait. We're looking for your items ...</p>
+                    <div class="progress">
+                        <div class="progress-bar bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        var counter = 0; // how many % gone?, from 0 to 100
+        var max_progress_width = $(".modal").first().width();
+        console.log(max_progress_width);
+        var progress = setInterval(function() {
+            var $bar = $('.bar');
+
+            if (counter >= 100) {
+
+                // complete
+
+                clearInterval(progress);
+                $('.progress').removeClass('active');
+                $('#esketitBtn').modal('hide');
+                $bar.width(0);
+
+            } else {
+
+                // perform processing logic here
+                console.log($bar.width().toString());
+                $bar.width($bar.width() + (max_progress_width / 10));
+                counter = counter + 10;
+            }
+
+            $bar.text(counter.toString() + "%");
+        }, 500);
+    </script>
+</body>
+
+</html>

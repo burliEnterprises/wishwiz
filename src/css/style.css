@@ -25,3 +25,7 @@ body {
 .btn-unlock {
     margin-top: 16px;
 }
+
+.modal {
+    width: 400px;
+}

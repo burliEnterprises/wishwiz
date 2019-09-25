@@ -1,12 +1,9 @@
-document.addEventListener('DOMContentLoaded', function() {
-    var clickButton = document.getElementById('clickIt');
-    clickButton.addEventListener('click', function() {
-
-      chrome.tabs.getSelected(null, function(tab) {
-        alert("Hure");
+$( "#esketitBtn" ).on( "click", function() {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      chrome.tabs.sendMessage(tabs[0].id, {greeting: "hello"}, function(response) {
+        console.log(response);  // log in popup inspector
       });
-    }, false);
-  }, false);
+    });
 
-
-// https://stackoverflow.com/questions/19758028/chrome-extension-get-dom-content
+    
+})
