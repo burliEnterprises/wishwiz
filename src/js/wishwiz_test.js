@@ -56,7 +56,7 @@ let rowItemsCount = myList[0].childElementCount;
 let itemsArray = document.getElementsByClassName('FeedItemV2__Wrapper-vf3155-0 eAeQHS');
 let myFreeStuff = filterElements(itemsArray, 0, 0);
 
-while(myFreeStuff.length < 10) {
+while(myFreeStuff.length < 50) {
   window.scrollTo(0, document.body.scrollHeight);
   //Set Sleep Timer
   await sleep(2000);
@@ -67,6 +67,7 @@ while(myFreeStuff.length < 10) {
   myFreeStuff = filterElements(itemsArray, 0, 0);
   console.log("Free Stuff: " + myFreeStuff.length);
 }
+console.log(myFreeStuff);
 
 window.scrollTo(0, 0);
 
@@ -74,8 +75,8 @@ let iteration = 0;
 deleteListElements(myList, iteration);
 
 for (let rowItem = 0; rowItem < rowItemsCount; rowItem++) {
-  for (let itemNum = rowItem*rowItemsCount; itemNum < rowItemsCount; itemNum++) {
-    if (itemNum < myFreeStuff.length-1) {
+  for (let itemNum = rowItem*rowItemsCount; itemNum < rowItemsCount*rowItem+4; itemNum++) {
+    if (itemNum <= myFreeStuff.length-1) {
       myList[rowItem].appendChild(myFreeStuff[itemNum]);
     }
   }
