@@ -32,14 +32,18 @@ function grabFreeProducts() {
     console.log("how many free products found? " + myFreeStuff.length);
     if (myFreeStuff.length < howManyFreeProductsYouWant) {
         window.scrollBy(0,document.body.scrollHeight);
-        sleep(200).then(function() { // unsauber as fuck, multiple threads? prolly
+    /*    sleep(1000).then(function() { // unsauber as fuck, multiple threads? prolly
             console.log("Total Height: " +   document.body.scrollHeight);
             grabFreeProducts();
-        })
+        }) */
+
+        //grabFreeProducts();
     };
     return myFreeStuff;
 
 }
+
+
 
 
 let howManyFreeProductsYouWant = 10;
@@ -48,6 +52,13 @@ let getProductRows = document.getElementsByClassName('ProductGrid__ProductGridRo
 console.log(getProductRows[0]);
 let productsPerRow = getProductRows[0].childElementCount;
 let allFreeProducts = grabFreeProducts();     // get the free products from all the products
+let hure = setInterval(function() {
+    if (allFreeProducts.length < howManyFreeProductsYouWant) {
+        allFreeProducts = grabFreeProducts();
+    } else {
+        clearInterval(hure);
+    }
+}, 2000);
 console.log(allFreeProducts);
 window.scrollTo(0, 0);
 for (let i = 0; i < howManyFreeProductsYouWant / 4; i++) {  // modulo +1, bishernur ganze reihen berücksichtigt
