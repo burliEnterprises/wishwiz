@@ -19,90 +19,122 @@ chrome.runtime.onMessage.addListener(
             .then(response => response.text())
             .then(data => {
                 $(  "body" ).prepend(data);
-                // Show dialog:
-                location.href="javascript:showWishwizModal(); void 0";
-                console.log("modal called");
+                // Show dialog with automatic progress bar time counter:
+                //location.href="javascript:showWishwizModal(); void 0";
+
+                // show progress bar, progressing when free item found;
+                location.href="javascript:showWishwizModal_progressWhenCalled(); void 0";
+                console.log("content.js told progress bar to show tf up");
                 //Gets All Elements and filters
 
 
-                function filterElements(itemsList, rangeFrom, rangeTo) {
-                  //rangeFrom = 0;
-                  //rangeTo = 0;
-                  let pricesArray = []
-                  //Get Prices of Parents
-                  for (let i = 0; i < itemsArray.length; i++) {
-                    pricesArray.push(itemsArray[i].getElementsByClassName('FeedItemV2__ActualPrice-vf3155-9 fgeAVX')[0]);
-                  }
+                function tellProgressBarToMoveOn() {
 
-                  let filteredList = [];
-                  let itemText;
-                  //Write "Free" Items into list
-                  for (let i = 0; i < pricesArray.length; i++) {
-                    itemText = pricesArray[i].innerText;
+                }
 
-                    //Clean Text:
-                    itemText = itemText.match(/\d/);
+                //gets a array of all products and returns all the free products
+                function filterElements(_singleProductsArray) {
 
-                    //Write to List
-                    if (isNaN(parseInt(itemText))) {
-                      filteredList.push(itemsArray[i]);
+                    let onlyFreeProductsArray = [];
+                    //Get Prices of Products
+                    for (let i = 0; i < _singleProductsArray.length; i++) {
+                        let = itemPriceText = _singleProductsArray[i].getElementsByClassName('FeedItemV2__ActualPrice-vf3155-9')[0].innerText;
+                        itemPriceText = itemPriceText.match(/\d/); // clean it up
+                        // if item has no numbers in price text ( "Kostenlos, Free", ... ) --> add it:
+                        if (isNaN(parseInt(itemPriceText))) {
+                            onlyFreeProductsArray.push(_singleProductsArray[i]);
+                        }
                     }
-                  }
-
-                  return filteredList;
+                    return onlyFreeProductsArray;
                 }
 
-                //Delete All child Elements from list
-                function deleteListElements(itemsList, iteration) {
-                  //Remove all Child Elements of current Parent
-                  if (itemsList[iteration].firstChild) {
-                    itemsList[iteration].removeChild(itemsList[iteration].firstChild);
-                    deleteListElements(itemsList, iteration);
-                  }
-
-                  //Move to next Parent
-                  if (iteration < itemsList.length-1) {
-                    iteration++;
-                    deleteListElements(itemsList, iteration);
-                  }
+                //util sleep function, not needed --> done via interval
+                const sleep = (milliseconds) => {
+                    return new Promise(resolve => setTimeout(resolve, milliseconds))
                 }
 
-                //util sleep function
-                function sleep(ms) {
-                  return new Promise(resolve => setTimeout(resolve, ms));
+
+
+                //Returns all the single free products in one array:
+                function grabFreeProducts() {
+                    let singleProductsArray = document.getElementsByClassName('FeedItemV2__Wrapper-vf3155-0');
+                    let myFreeStuff = filterElements(singleProductsArray);
+                    console.log("how many free products found? " + myFreeStuff.length);
+                    if (myFreeStuff.length < howManyFreeProductsYouWant) {
+                        window.scrollBy(0, document.body.scrollHeight);
+                        /*    sleep(1000).then(function() { // unsauber as fuck, multiple threads? prolly, implemented in a interval now
+                                console.log("Total Height: " +   document.body.scrollHeight);
+                                grabFreeProducts();
+                            }) */
+                        //grabFreeProducts();   //scrolling needed more time, therefore didnt work.
+                    };
+                    return myFreeStuff;
+
                 }
 
-                let myList = document.getElementsByClassName('ProductGrid__ProductGridRow-sc-1luslvl-2 eseDDl');
-                let rowItemsCount = myList[0].childElementCount;
-                //Get All Elements (Parents)
-                let itemsArray = document.getElementsByClassName('FeedItemV2__Wrapper-vf3155-0 eAeQHS');
-                let myFreeStuff = filterElements(itemsArray, 0, 0);
-
-                while(myFreeStuff.length < 50) {
-                  window.scrollTo(0, document.body.scrollHeight);
-                  //Set Sleep Timer
-                  await sleep(2000);
-                  itemsArray = document.getElementsByClassName('FeedItemV2__Wrapper-vf3155-0 eAeQHS');
-                  console.log("Products: " + itemsArray.length);
-                  myList = document.getElementsByClassName('ProductGrid__ProductGridRow-sc-1luslvl-2 eseDDl');
-                  console.log("Total rows: " + myList.length);
-                  myFreeStuff = filterElements(itemsArray, 0, 0);
-                  console.log("Free Stuff: " + myFreeStuff.length);
-                }
-                console.log(myFreeStuff);
-
-                window.scrollTo(0, 0);
-
-                let iteration = 0;
-                deleteListElements(myList, iteration);
-
-                for (let rowItem = 0; rowItem < rowItemsCount; rowItem++) {
-                  for (let itemNum = rowItem*rowItemsCount; itemNum < rowItemsCount*rowItem+4; itemNum++) {
-                    if (itemNum <= myFreeStuff.length-1) {
-                      myList[rowItem].appendChild(myFreeStuff[itemNum]);
+                //Delete all child Elements from the first rows (all rows, row iteration, count of rows to clean up)
+                function deleteListElements(itemsList, i, max_i) {
+                    //Remove all Child Elements of current Parent
+                    if (itemsList[i].firstChild) {
+                        itemsList[i].removeChild(itemsList[i].firstChild);
+                        deleteListElements(itemsList, i, max_i);
                     }
-                  }
+                    i++;    //Move to next Parent
+                    if (i < max_i) {
+                        deleteListElements(itemsList, i, max_i);
+                    }
                 }
+
+
+
+                // all products from all rows!:
+                let getProductRows = document.getElementsByClassName('ProductGrid__ProductGridRow-sc-1luslvl-2');
+                // how many products in one row? --> for responsive reasons:
+                let productsPerRow = getProductRows[0].childElementCount;
+
+                // To-Do: User Input in Extension Dialog:
+                let howManyFreeProductsYouWant = 12;
+                let howManyRowsNeeded = Math.ceil(howManyFreeProductsYouWant / productsPerRow) // how many rows are gonna be filled with free items
+                let justFoundItems = true; // if enough items are found, needed once for scrolling to top in interval
+
+                let allFreeProducts = [];
+                let hure = setInterval(function() {
+                    if (allFreeProducts.length < howManyFreeProductsYouWant) {
+                        allFreeProducts = grabFreeProducts(); // get the free products from all the products
+                        // To-Do: Progress Progress Bar
+                        location.href="javascript:progressTheBar(" + allFreeProducts.length + "," + howManyFreeProductsYouWant + ")";
+                    } else {
+                        console.log(allFreeProducts);
+                        if (justFoundItems == true) {   // implemented, so that scrolling to the top top is guarenteed in terms of time issues
+                            window.scrollTo(0, 0);
+                            justFoundItems = false;
+                        } else {
+                            deleteListElements(getProductRows, 0, howManyRowsNeeded);   // delete all the items in the rows needed
+                            //debugger;
+                            for (let i = 0; i < howManyRowsNeeded; i++) {   // for each row ...
+                                for (let j = i * productsPerRow; j < i * productsPerRow + productsPerRow; j++) {    // ... append free products
+                                    if ( j < allFreeProducts.length) {   // if last row wouldnt be fully filled (e.g. 18 items, 4 rows -> 2 spots empty)
+                                        getProductRows[i].appendChild(allFreeProducts[j]);
+                                    }
+                                }
+                            };
+                            console.log("Congrats, the free products are shown on top. Probs to the developers :)") // it is what it is
+                            location.href="javascript:dismissTheBar(); void 0";     // swerve, progress bar
+                        clearInterval(hure);
+                    }
+                    }
+                }, 2000);   // wait 2 seconds after scrolling, to make sure everything reloaded
+
+
+
+
+
+
+
+
+
+
+
 
             }).catch(err => {
                 // handle error

@@ -15,7 +15,10 @@
             width: 400px;
             display: none;
             font-family: Verdana;
-            z-index: 1000000 /* bring element to the front */
+            z-index: 1000000; /* bring element to the front */
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         #progress-wishwiz {
@@ -117,7 +120,7 @@
 
 
 
-            function showWishwizModal() {
+            function showWishwizModal_automaticInterval() {
                 $('#overlay-bg-wishwiz').show();        // show div --> create overlay for all the other content
                 $('#modal-wishwiz').show();             // show popup dialog
                 //debugger;
@@ -144,6 +147,31 @@
                     $bar.text(counter.toString() + "%");
                 }, 400);
             }
+
+            function showWishwizModal_progressWhenCalled() {
+                $('#overlay-bg-wishwiz').show();        // show div --> create overlay for all the other content
+                $('#modal-wishwiz').show();             // show popup dialog
+            }
+
+            function progressTheBar(stepNumber, numberOfSteps) {
+                console.log("progressTheBar got called with parameters: " + stepNumber + " and " + numberOfSteps);
+                    var $bar = $('#progress-wishwiz');
+                    var max_progress_width = $("#modal-wishwiz").width();
+                    if (numberOfSteps >= stepNumber) {
+                        $bar.width(max_progress_width * (stepNumber / numberOfSteps));
+                        $bar.text(stepNumber + " of " + numberOfSteps + " Products found!");
+                    } else {    // if more products are found through the last scrolling
+                        $bar.width(max_progress_width);
+                        $bar.text("Products found! Processing ...");
+                    }
+                }
+
+            function dismissTheBar() {
+                // complete
+                $('#modal-wishwiz').remove()    // remove from dom, wird neu ineglada wenn ma nomol button clickt ya know
+                $('#overlay-bg-wishwiz').remove()
+            }
+
 
     </script>
 </body>
