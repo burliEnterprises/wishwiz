@@ -26,11 +26,9 @@ chrome.runtime.onMessage.addListener(
                 location.href="javascript:showWishwizModal_progressWhenCalled(); void 0";
                 console.log("content.js told progress bar to show tf up");
                 //Gets All Elements and filters
+                console.log(request + " ; " + sender + " ; " + sendResponse);
+                debugger;
 
-
-                function tellProgressBarToMoveOn() {
-
-                }
 
                 //gets a array of all products and returns all the free products
                 function filterElements(_singleProductsArray) {
