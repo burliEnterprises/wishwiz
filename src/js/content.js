@@ -83,15 +83,6 @@ chrome.runtime.onMessage.addListener(
                     }
                 }
 
-                function removeDuplicatesFromArray(array) {
-                    let unique = {};
-                    array.forEach(function(i) {
-                        if (!array[i]) {
-                            array[i] = true;
-                        }
-                    });
-                    return Object.keys(unique);
-                }
 
                 // all products from all rows!:
                 let getProductRows = document.getElementsByClassName('ProductGrid__ProductGridRow-sc-1luslvl-2');
@@ -112,9 +103,10 @@ chrome.runtime.onMessage.addListener(
                             allFreeProducts.push(newProducts[iter]);
                         }
 
-                        console.log("-----Before allFreeProducts: " + allFreeProducts.length);
-                        removeDuplicatesFromArray(allFreeProducts);
-                        console.log("-----AFTER allFreeProducts: " + allFreeProducts.length);
+                        console.log("Before allFreeProducts: " + allFreeProducts.length);
+                        //Removes duplicates from list
+                        allFreeProducts = [...new Set(allFreeProducts)];
+                        console.log("AFTER allFreeProducts: " + allFreeProducts.length);
 
                         // To-Do: Progress Progress Bar
                         location.href="javascript:progressTheBar(" + allFreeProducts.length + "," + howManyFreeProductsYouWant + ")";
