@@ -35,7 +35,7 @@
     ],
     "options_page": "src/options.html",
     "browser_action": {
-        "default_icon": "src/icons/icon19.png",
+        "default_icon": "src/icons/icon19-white.png",
         "default_title": "The WishWiz",
         "default_popup": "src/index.html"
     },
