@@ -4,16 +4,17 @@ That's why we decided to make _The WishWiz_, a Chrome extension that finds all t
 
 ------------------------------------------------------------
 
-# ToDo:
-- price filter, only free products searched for by now
-
+## ToDo:
 - item range, user decides how many products are shown(?)
 
 -------------------------------------------------------------
 
-# Resolved:
+## Resolved:
 
 - Don't override all elements when new ones are found in getFreeStuff(), add them to the List
 --> otherwise DOM gets too big and elements on top are left out when new ones join the List
 
 - only enable extension on the site wish.com
+
+-
+- price filter, only free products searched for by now
