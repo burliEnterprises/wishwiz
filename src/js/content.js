@@ -26,7 +26,6 @@ chrome.runtime.onMessage.addListener(
                 location.href="javascript:showWishwizModal_progressWhenCalled(); void 0";
                 console.log("content.js told progress bar to show tf up");
                 //Gets All Elements and filters
-                console.log(request + " ; " + sender + " ; " + sendResponse);
                 debugger;
 
 
@@ -96,6 +95,11 @@ chrome.runtime.onMessage.addListener(
                 // how many products in one row? --> for responsive reasons:
                 let productsPerRow = getProductRows[0].childElementCount;
 
+                let maxProductPrice = request["maxPrice"];
+                if ( maxProductPrice == null) { // if no input for max price ...
+                    maxProductPrice = 0;    // ... search for the free shit
+                }
+                console.log("User input for max. price: " + maxProductPrice);
                 // To-Do: User Input in Extension Dialog:
                 let howManyFreeProductsYouWant = 12;
                 let howManyRowsNeeded = Math.ceil(howManyFreeProductsYouWant / productsPerRow) // how many rows are gonna be filled with free items
