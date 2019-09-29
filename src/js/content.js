@@ -1,6 +1,7 @@
 console.log("content.js is here");
 
-
+//Used to notify for Icon-change
+chrome.runtime.sendMessage({ onTarget: true });
 
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
