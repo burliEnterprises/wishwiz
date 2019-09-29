@@ -25,22 +25,35 @@ chrome.runtime.onMessage.addListener(
                 // show progress bar, progressing when free item found;
                 location.href="javascript:showWishwizModal_progressWhenCalled(); void 0";
                 console.log("content.js told progress bar to show tf up");
-                //Gets All Elements and filters
-                debugger;
-
 
                 //gets a array of all products and returns all the free products
-                function filterElements(_singleProductsArray) {
+                function filterElements(_singleProductsArray, _inputUserMaxPrice) {
 
                     let onlyFreeProductsArray = [];
                     //Get Prices of Products
                     for (let i = 0; i < _singleProductsArray.length; i++) {
-                        let = itemPriceText = _singleProductsArray[i].getElementsByClassName('FeedItemV2__ActualPrice-vf3155-9')[0].innerText;
-                        itemPriceText = itemPriceText.match(/\d/); // clean it up
+                        let itemPriceText = _singleProductsArray[i].getElementsByClassName('FeedItemV2__ActualPrice-vf3155-9')[0].innerText;
+
+                        let numb = itemPriceText.match(/\d/g);
+                        if (isNaN(parseInt(numb))) {   // else its NaN, not 0
+                            itemPriceText = 0;
+                        } else {
+                        numb = numb.join("");
+                        itemPriceText = numb;   // clean it up, cuts the "€" away
+                    }
+                        /* just checking if product free or not:
                         // if item has no numbers in price text ( "Kostenlos, Free", ... ) --> add it:
                         if (isNaN(parseInt(itemPriceText))) {
                             onlyFreeProductsArray.push(_singleProductsArray[i]);
+                        } */
+
+                        // check if product is cheaper than max price set by the user in input:
+
+                        console.log("itemprice " + itemPriceText);
+                        if (itemPriceText <= parseInt(_inputUserMaxPrice)) {
+                            onlyFreeProductsArray.push(_singleProductsArray[i]);
                         }
+
                     }
                     return onlyFreeProductsArray;
                 }
@@ -51,9 +64,9 @@ chrome.runtime.onMessage.addListener(
                 }
 
                 //Returns all the single free products in one array:
-                function grabFreeProducts() {
+                function grabFreeProducts(_inputUserMaxPrice) {
                     let singleProductsArray = document.getElementsByClassName('FeedItemV2__Wrapper-vf3155-0');
-                    let myFreeStuff = filterElements(singleProductsArray);
+                    let myFreeStuff = filterElements(singleProductsArray, _inputUserMaxPrice);
                     console.log("how many free products found? " + myFreeStuff.length);
                     if (myFreeStuff.length < howManyFreeProductsYouWant) {
                         window.scrollBy(0, document.body.scrollHeight);
@@ -86,8 +99,8 @@ chrome.runtime.onMessage.addListener(
                 // how many products in one row? --> for responsive reasons:
                 let productsPerRow = getProductRows[0].childElementCount;
 
-                let maxProductPrice = request["maxPrice"];
-                if ( maxProductPrice == null) { // if no input for max price ...
+                let maxProductPrice = request["maxPrice"];  // from index.html --> button event in popup.js --> request in chrome message
+                if ( maxProductPrice == "") { // if no input for max price ...
                     maxProductPrice = 0;    // ... search for the free shit
                 }
                 console.log("User input for max. price: " + maxProductPrice);
@@ -99,7 +112,7 @@ chrome.runtime.onMessage.addListener(
                 let allFreeProducts = [];
                 let hure = setInterval(function() {
                     if (allFreeProducts.length < howManyFreeProductsYouWant) {
-                        let newProducts = grabFreeProducts(); // get the free products from all the products
+                        let newProducts = grabFreeProducts(maxProductPrice); // get the free products (or the product cheaper than user wants) from all the products
                         //Add ALL new Products to list (duplicates included)
                         for (let iter = 0; iter < newProducts.length; iter++) {
                             allFreeProducts.push(newProducts[iter]);
