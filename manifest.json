@@ -41,7 +41,6 @@
     },
     "permissions": [
         "storage",
-        "declartiveContent",
         "activeTab",
         "<all_urls>"
     ]
