@@ -106,7 +106,7 @@ chrome.runtime.onMessage.addListener(
                 }
                 console.log("User input for max. price: " + maxProductPrice);
                 // To-Do: User Input in Extension Dialog:
-                let howManyFreeProductsYouWant = 12;
+                let howManyFreeProductsYouWant = 52;
                 let howManyRowsNeeded = Math.ceil(howManyFreeProductsYouWant / productsPerRow) // how many rows are gonna be filled with free items
                 let justFoundItems = true; // if enough items are found, needed once for scrolling to top in interval
 

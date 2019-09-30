@@ -8,7 +8,7 @@
     "icons": {
         "16": "src/icons/icon16.png",
         "48": "src/icons/icon48.png",
-        "128": "src/icons/icon128.png",
+        "128": "src/icons/icon128.png"
     },
     "background": {
         "scripts": [
@@ -17,7 +17,8 @@
     },
     "content_scripts": [{
         "matches": [
-            "https://www.wish.com/*"
+            "https://www.wish.com/*",
+            "https://wish.com/*"
         ],
         "js": [
             "src/js/content.js",
@@ -41,6 +42,7 @@
     },
     "permissions": [
         "storage",
+        "declartiveContent",
         "activeTab",
         "<all_urls>"
     ]
