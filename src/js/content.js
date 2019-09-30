@@ -43,140 +43,145 @@ chrome.runtime.onMessage.addListener(
         $('body').prepend($('<script>')
             .attr("type", "text/javascript")
             .attr("src", path));*/
-        fetch(chrome.runtime.getURL('src/popup.html'))
-            .then(response => response.text())
-            .then(data => {
-                $(  "body" ).prepend(data);
 
-                // close the popup boxes on the right side of the site:
-                document.getElementById("all-modals-wishwiz").style.display = "none";
+        if (request["currentUrl"].includes("product")) {
+            // filtern nicht ausfuehren wenn ein einzelprodukt angezeigt wird.
+            alert("Sorry, we can't filter on a single product page :(");
+        } else {
+            fetch(chrome.runtime.getURL('src/popup.html'))
+                .then(response => response.text())
+                .then(data => {
+                    $(  "body" ).prepend(data);
 
-                // Show dialog with automatic progress bar time counter:
-                //location.href="javascript:showWishwizModal(); void 0";
+                    // close the popup boxes on the right side of the site:
+                    document.getElementById("all-modals-wishwiz").style.display = "none";
 
-                // show progress bar, progressing when free item found;
-                location.href="javascript:showWishwizModal_progressWhenCalled(); void 0";
+                    // Show dialog with automatic progress bar time counter:
+                    //location.href="javascript:showWishwizModal(); void 0";
 
-                //gets a array of all products and returns all the free products
-                function filterElements(_singleProductsArray, _inputUserMaxPrice) {
+                    // show progress bar, progressing when free item found;
+                    location.href="javascript:showWishwizModal_progressWhenCalled(); void 0";
 
-                    let onlyFreeProductsArray = [];
-                    //Get Prices of Products
-                    for (let i = 0; i < _singleProductsArray.length; i++) {
-                        let itemPriceText = _singleProductsArray[i].getElementsByClassName('FeedItemV2__ActualPrice-vf3155-9')[0].innerText;
+                    //gets a array of all products and returns all the free products
+                    function filterElements(_singleProductsArray, _inputUserMaxPrice) {
 
-                        let numb = itemPriceText.match(/\d/g);
-                        if (isNaN(parseInt(numb))) {   // else its NaN, not 0
-                            itemPriceText = 0;
-                        } else {
-                        numb = numb.join("");
-                        itemPriceText = numb;   // clean it up, cuts the "€" away
-                    }
-                        /* just checking if product free or not:
-                        // if item has no numbers in price text ( "Kostenlos, Free", ... ) --> add it:
-                        if (isNaN(parseInt(itemPriceText))) {
-                            onlyFreeProductsArray.push(_singleProductsArray[i]);
-                        } */
+                        let onlyFreeProductsArray = [];
+                        //Get Prices of Products
+                        for (let i = 0; i < _singleProductsArray.length; i++) {
+                            let itemPriceText = _singleProductsArray[i].getElementsByClassName('FeedItemV2__ActualPrice-vf3155-9')[0].innerText;
 
-                        // check if product is cheaper than max price set by the user in input:
-
-                        console.log("itemprice " + itemPriceText);
-                        if (itemPriceText <= parseInt(_inputUserMaxPrice)) {
-                            onlyFreeProductsArray.push(_singleProductsArray[i]);
+                            let numb = itemPriceText.match(/\d/g);
+                            if (isNaN(parseInt(numb))) {   // else its NaN, not 0
+                                itemPriceText = 0;
+                            } else {
+                            numb = numb.join("");
+                            itemPriceText = numb;   // clean it up, cuts the "€" away
                         }
+                            /* just checking if product free or not:
+                            // if item has no numbers in price text ( "Kostenlos, Free", ... ) --> add it:
+                            if (isNaN(parseInt(itemPriceText))) {
+                                onlyFreeProductsArray.push(_singleProductsArray[i]);
+                            } */
 
-                    }
-                    return onlyFreeProductsArray;
-                }
+                            // check if product is cheaper than max price set by the user in input:
 
-                //util sleep function, not needed --> done via interval
-                const sleep = (milliseconds) => {
-                    return new Promise(resolve => setTimeout(resolve, milliseconds))
-                }
+                            console.log("itemprice " + itemPriceText);
+                            if (itemPriceText <= parseInt(_inputUserMaxPrice)) {
+                                onlyFreeProductsArray.push(_singleProductsArray[i]);
+                            }
 
-                //Returns all the single free products in one array:
-                function grabFreeProducts(_inputUserMaxPrice) {
-                    let singleProductsArray = document.getElementsByClassName('FeedItemV2__Wrapper-vf3155-0');
-                    let myFreeStuff = filterElements(singleProductsArray, _inputUserMaxPrice);
-                    console.log("how many free products found? " + myFreeStuff.length);
-                    if (myFreeStuff.length < howManyFreeProductsYouWant) {
-                        window.scrollBy(0, document.body.scrollHeight);
-                        /*    sleep(1000).then(function() { // unsauber as fuck, multiple threads? prolly, implemented in a interval now
-                                console.log("Total Height: " +   document.body.scrollHeight);
-                                grabFreeProducts();
-                            }) */
-                        //grabFreeProducts();   //scrolling needed more time, therefore didnt work.
-                    };
-                    return myFreeStuff;
-
-                }
-
-                //Delete all child Elements from the first rows (all rows, row iteration, count of rows to clean up)
-                function deleteListElements(itemsList, i, max_i) {
-                    //Remove all Child Elements of current Parent
-                    if (itemsList[i].firstChild) {
-                        itemsList[i].removeChild(itemsList[i].firstChild);
-                        deleteListElements(itemsList, i, max_i);
-                    }
-                    i++;    //Move to next Parent
-                    if (i < max_i) {
-                        deleteListElements(itemsList, i, max_i);
-                    }
-                }
-
-
-                // all products from all rows!:
-                let getProductRows = document.getElementsByClassName('ProductGrid__ProductGridRow-sc-1luslvl-2');
-                // how many products in one row? --> for responsive reasons:
-                let productsPerRow = getProductRows[0].childElementCount;
-
-                let maxProductPrice = request["maxPrice"];  // from index.html --> button event in popup.js --> request in chrome message
-                if ( maxProductPrice == "") { // if no input for max price ...
-                    maxProductPrice = 0;    // ... search for the free shit
-                }
-                console.log("User input for max. price: " + maxProductPrice);
-                // To-Do: User Input in Extension Dialog:
-                let howManyFreeProductsYouWant = 52;
-                let howManyRowsNeeded = Math.ceil(howManyFreeProductsYouWant / productsPerRow) // how many rows are gonna be filled with free items
-                let justFoundItems = true; // if enough items are found, needed once for scrolling to top in interval
-
-                let allFreeProducts = [];
-                let hure = setInterval(function() {
-                    if (allFreeProducts.length < howManyFreeProductsYouWant) {
-                        let newProducts = grabFreeProducts(maxProductPrice); // get the free products (or the product cheaper than user wants) from all the products
-                        //Add ALL new Products to list (duplicates included)
-                        for (let iter = 0; iter < newProducts.length; iter++) {
-                            allFreeProducts.push(newProducts[iter]);
                         }
+                        return onlyFreeProductsArray;
+                    }
 
-                        console.log("Before allFreeProducts: " + allFreeProducts.length);
-                        //Removes duplicates from list
-                        allFreeProducts = [...new Set(allFreeProducts)];
-                        console.log("AFTER allFreeProducts: " + allFreeProducts.length);
+                    //util sleep function, not needed --> done via interval
+                    const sleep = (milliseconds) => {
+                        return new Promise(resolve => setTimeout(resolve, milliseconds))
+                    }
 
-                        // To-Do: Progress Progress Bar
-                        location.href="javascript:progressTheBar(" + allFreeProducts.length + "," + howManyFreeProductsYouWant + ")";
-                    } else {
-                        console.log(allFreeProducts);
-                        if (justFoundItems == true) {   // implemented, so that scrolling to the top top is guarenteed in terms of time issues
-                            window.scrollTo(0, 0);
-                            justFoundItems = false;
+                    //Returns all the single free products in one array:
+                    function grabFreeProducts(_inputUserMaxPrice) {
+                        let singleProductsArray = document.getElementsByClassName('FeedItemV2__Wrapper-vf3155-0');
+                        let myFreeStuff = filterElements(singleProductsArray, _inputUserMaxPrice);
+                        console.log("how many free products found? " + myFreeStuff.length);
+                        if (myFreeStuff.length < howManyFreeProductsYouWant) {
+                            window.scrollBy(0, document.body.scrollHeight);
+                            /*    sleep(1000).then(function() { // unsauber as fuck, multiple threads? prolly, implemented in a interval now
+                                    console.log("Total Height: " +   document.body.scrollHeight);
+                                    grabFreeProducts();
+                                }) */
+                            //grabFreeProducts();   //scrolling needed more time, therefore didnt work.
+                        };
+                        return myFreeStuff;
+
+                    }
+
+                    //Delete all child Elements from the first rows (all rows, row iteration, count of rows to clean up)
+                    function deleteListElements(itemsList, i, max_i) {
+                        //Remove all Child Elements of current Parent
+                        if (itemsList[i].firstChild) {
+                            itemsList[i].removeChild(itemsList[i].firstChild);
+                            deleteListElements(itemsList, i, max_i);
+                        }
+                        i++;    //Move to next Parent
+                        if (i < max_i) {
+                            deleteListElements(itemsList, i, max_i);
+                        }
+                    }
+
+
+                    // all products from all rows!:
+                    let getProductRows = document.getElementsByClassName('ProductGrid__ProductGridRow-sc-1luslvl-2');
+                    // how many products in one row? --> for responsive reasons:
+                    let productsPerRow = getProductRows[0].childElementCount;
+
+                    let maxProductPrice = request["maxPrice"];  // from index.html --> button event in popup.js --> request in chrome message
+                    if ( maxProductPrice == "") { // if no input for max price ...
+                        maxProductPrice = 0;    // ... search for the free shit
+                    }
+                    console.log("User input for max. price: " + maxProductPrice);
+                    // To-Do: User Input in Extension Dialog:
+                    let howManyFreeProductsYouWant = 52;
+                    let howManyRowsNeeded = Math.ceil(howManyFreeProductsYouWant / productsPerRow) // how many rows are gonna be filled with free items
+                    let justFoundItems = true; // if enough items are found, needed once for scrolling to top in interval
+
+                    let allFreeProducts = [];
+                    let hure = setInterval(function() {
+                        if (allFreeProducts.length < howManyFreeProductsYouWant) {
+                            let newProducts = grabFreeProducts(maxProductPrice); // get the free products (or the product cheaper than user wants) from all the products
+                            //Add ALL new Products to list (duplicates included)
+                            for (let iter = 0; iter < newProducts.length; iter++) {
+                                allFreeProducts.push(newProducts[iter]);
+                            }
+
+                            console.log("Before allFreeProducts: " + allFreeProducts.length);
+                            //Removes duplicates from list
+                            allFreeProducts = [...new Set(allFreeProducts)];
+                            console.log("AFTER allFreeProducts: " + allFreeProducts.length);
+
+                            // To-Do: Progress Progress Bar
+                            location.href="javascript:progressTheBar(" + allFreeProducts.length + "," + howManyFreeProductsYouWant + ")";
                         } else {
-                            deleteListElements(getProductRows, 0, howManyRowsNeeded);   // delete all the items in the rows needed
-                            //debugger;
-                            for (let i = 0; i < howManyRowsNeeded; i++) {   // for each row ...
-                                for (let j = i * productsPerRow; j < i * productsPerRow + productsPerRow; j++) {    // ... append free products
-                                    if ( j < allFreeProducts.length) {   // if last row wouldnt be fully filled (e.g. 18 items, 4 rows -> 2 spots empty)
-                                        getProductRows[i].appendChild(allFreeProducts[j]);
+                            console.log(allFreeProducts);
+                            if (justFoundItems == true) {   // implemented, so that scrolling to the top top is guarenteed in terms of time issues
+                                window.scrollTo(0, 0);
+                                justFoundItems = false;
+                            } else {
+                                deleteListElements(getProductRows, 0, howManyRowsNeeded);   // delete all the items in the rows needed
+                                //debugger;
+                                for (let i = 0; i < howManyRowsNeeded; i++) {   // for each row ...
+                                    for (let j = i * productsPerRow; j < i * productsPerRow + productsPerRow; j++) {    // ... append free products
+                                        if ( j < allFreeProducts.length) {   // if last row wouldnt be fully filled (e.g. 18 items, 4 rows -> 2 spots empty)
+                                            getProductRows[i].appendChild(allFreeProducts[j]);
+                                        }
                                     }
-                                }
-                            };
-                            console.log("Congrats, the free products are shown on top. Probs to the developers :)") // it is what it is
-                            location.href="javascript:dismissTheBar(); void 0";     // swerve, progress bar
-                        clearInterval(hure);
-                    }
-                    }
-                }, 2000);   // wait 2 seconds after scrolling, to make sure everything reloaded
+                                };
+                                console.log("Congrats, the free products are shown on top. Probs to the developers :)") // it is what it is
+                                location.href="javascript:dismissTheBar(); void 0";     // swerve, progress bar
+                            clearInterval(hure);
+                        }
+                        }
+                    }, 2000);   // wait 2 seconds after scrolling, to make sure everything reloaded
 
 
 
@@ -189,9 +194,10 @@ chrome.runtime.onMessage.addListener(
 
 
 
-            }).catch(err => {
-                // handle error
-            });
+                }).catch(err => {
+                    // handle error
+                });
+        }
         console.log(request); //log in general site inspector
         sendResponse({
             "farewell": "hola"
