@@ -2,7 +2,7 @@
 
 ![;)](https://www.azquotes.com/picture-quotes/quote-the-best-things-in-life-are-free-luther-vandross-64-40-14.jpg)
 
-Cheap products are awesome. But what's even better than cheap products? Free products. The best things in life are free
+Cheap products are awesome. But what's even better than cheap products? Free products.
 That's why we decided to make _The WishWiz_, a Chrome extension that finds all the free products from your feed or search on the marketplace Wish.
 
 ------------------------------------------------------------
