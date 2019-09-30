@@ -26,7 +26,7 @@ That's why we decided to make _The WishWiz_, a Chrome extension that finds all t
 
 ------------------------------------------------------------
 
-##Limits:
+## Limits:
 
 - It is not possible to automatically open the extension dialog when "Wish" is loaded.
 --> Google doesn't allow this:
