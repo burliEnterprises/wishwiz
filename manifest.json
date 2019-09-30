@@ -21,8 +21,8 @@
             "https://wish.com/*"
         ],
         "js": [
-            "src/js/content.js",
-            "src/js/jquery.min.js"
+            "src/js/jquery.min.js",
+            "src/js/content.js"
         ],
         "css": [
             "src/css/style.css"
@@ -30,6 +30,7 @@
     }],
     "web_accessible_resources": [
         "src/popup.html",
+        "src/popup-right-notice.html",
         "src/js/*",
         "src/icons/*",
         "src/css/*"

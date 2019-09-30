@@ -1,11 +1,38 @@
 console.log("content.js is here");
 
+/* Content.JS is the file that can actually talk to the DOM and change it.
+You can only do shit on the site from here, you need to write "messages" to get here from another file.
+Look at popup.js for the processing of the button click in the dialog e.g.
+*/
+
+
 //Used to notify for Icon-change
 chrome.runtime.sendMessage({ onTarget: true });
 
+// standard
+$( document ).ready(function() {
+    var path = chrome.runtime.getURL('src/css/bootstrap.min.dialog.css');
+    $('head').append($('<link>')
+        .attr("rel", "stylesheet")
+        .attr("type", "text/css")
+        .attr("href", path));
+
+
+    // show the popup boxes on the right side that tell the user to click the damn icon in the chrome toolbar:
+    fetch(chrome.runtime.getURL('src/popup-right-notice.html'))
+        .then(response => response.text())
+        .then(data => {
+            $(  "body" ).prepend(data);
+        })
+
+
+
+});
+
+
+
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-
         var path = chrome.runtime.getURL('src/css/bootstrap.min.dialog.css');
         $('head').append($('<link>')
             .attr("rel", "stylesheet")
@@ -20,12 +47,15 @@ chrome.runtime.onMessage.addListener(
             .then(response => response.text())
             .then(data => {
                 $(  "body" ).prepend(data);
+
+                // close the popup boxes on the right side of the site:
+                document.getElementById("all-modals-wishwiz").style.display = "none";
+
                 // Show dialog with automatic progress bar time counter:
                 //location.href="javascript:showWishwizModal(); void 0";
 
                 // show progress bar, progressing when free item found;
                 location.href="javascript:showWishwizModal_progressWhenCalled(); void 0";
-                console.log("content.js told progress bar to show tf up");
 
                 //gets a array of all products and returns all the free products
                 function filterElements(_singleProductsArray, _inputUserMaxPrice) {

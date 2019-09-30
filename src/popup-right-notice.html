@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>The WishWiz</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.dialog.css" />
+</head>
+
+<body>
+    <style>
+        .modalsyaknow {
+            font-size: 14px;
+            width: 200px;
+            display: fixed;
+            font-family: Verdana;
+            z-index: 1000000;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            /* bring element to the front */
+        }
+
+        .all-modals {
+            position: fixed;
+            right: 30px;
+            top: 15%;
+            z-index: 1000;
+        }
+
+        .wishwiz-p {
+            margin: 0;
+        }
+
+        .close_ {
+            position: absolute;
+            right: 16px;
+            top: 16px;
+            width: 16px;
+            height: 16px;
+            opacity: 0.3;
+            z-index: 9000000000000;
+        }
+
+        .close_:hover {
+            opacity: 1;
+        }
+
+        .close_:before,
+        .close_:after {
+            position: absolute;
+            left: 15px;
+            content: ' ';
+            height: 16px;
+            width: 2px;
+            background-color: #333;
+        }
+
+        .close_:before {
+            transform: rotate(45deg);
+        }
+
+        .close_:after {
+            transform: rotate(-45deg);
+        }
+    </style>
+    <div class="all-modals" id="all-modals-wishwiz">
+            <div class="modal-dialog modalsyaknow" id="modal-wishwiz-r1" role="dialog">
+
+                <div class="modal-content">
+                    <a href="#" onclick="closeDialogR1()" class="close_"></a>
+                    <div class="modal-body center-block">
+                        <p class="wishwiz-p">Hello there 😊</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-dialog modalsyaknow" id="modal-wishwiz-r2" role="dialog">
+                <div class="modal-content">
+                    <a href="#" onclick="closeDialogR2()" class="close_"></a>
+                    <div class="modal-body center-block">
+                        <p class="wishwiz-p">Would you like to just see the free products?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-dialog modalsyaknow" id="modal-wishwiz-r3" role="dialog">
+                <div class="modal-content">
+                    <a href="#" onclick="closeDialogR3()" class="close_"></a>
+                    <div class="modal-body center-block">
+                        <p class="wishwiz-p">Use <b>The WishWiz!</b> Click our icon in the extension toolbar above!</p>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <!--<script src="js/jquery.min.js"></script>-->
+    <script>
+        function closeDialogR1() {
+            let x = document.getElementById("modal-wishwiz-r1").style.display = "none";
+        }
+        function closeDialogR2() {
+            let x = document.getElementById("modal-wishwiz-r2").style.display = "none";
+        }
+        function closeDialogR3() {
+            let x = document.getElementById("modal-wishwiz-r3").style.display = "none";
+        }
+    </script>
+</body>
+
+</html>
