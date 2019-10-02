@@ -95,13 +95,25 @@
     <!--<script src="js/jquery.min.js"></script>-->
     <script>
         function closeDialogR1() {
-            let x = document.getElementById("modal-wishwiz-r1").style.display = "none";
+            document.getElementById("modal-wishwiz-r1").style.display = "none";
         }
         function closeDialogR2() {
-            let x = document.getElementById("modal-wishwiz-r2").style.display = "none";
+            document.getElementById("modal-wishwiz-r2").style.display = "none";
         }
         function closeDialogR3() {
-            let x = document.getElementById("modal-wishwiz-r3").style.display = "none";
+            document.getElementById("modal-wishwiz-r3").style.display = "none";
+        }
+        function closeAllDialogs() {
+            closeDialogR1();
+            closeDialogR2();
+            closeDialogR3();
+        }
+
+        window.onscroll = function () {
+            closeDialogR1();
+            closeDialogR2();
+            closeDialogR3();
+            //alert("scroll");
         }
     </script>
 </body>
