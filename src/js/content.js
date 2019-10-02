@@ -175,6 +175,13 @@ chrome.runtime.onMessage.addListener(
                                             getProductRows[i].appendChild(allFreeProducts[j]);
                                         }
                                     }
+                                    // place the "show more products" button at the end
+                                    if ( (i + 1) == howManyRowsNeeded) {
+                                        let divLoadMore = document.getElementById('load-more-div');
+                                        let x = getProductRows[i].parentNode;
+                                        x.appendChild(divLoadMore);
+
+                                    }
                                 };
                                 console.log("Congrats, the free products are shown on top. Probs to the developers :)") // it is what it is
                                 location.href="javascript:dismissTheBar(); void 0";     // swerve, progress bar
@@ -185,18 +192,25 @@ chrome.runtime.onMessage.addListener(
 
 
 
-
-
-
-
-
-
-
-
-
                 }).catch(err => {
                     // handle error
                 });
+
+                // show the popup boxes on the right side that tell the user to click the damn icon in the chrome toolbar:
+                // show progress bar, progressing when free item found;
+                location.href="javascript:closeAllDialogs(); void 0";
+                fetch(chrome.runtime.getURL('src/popup-right-notice-new-tab.html'))
+                    .then(response => response.text())
+                    .then(data => {
+                        $(  "body" ).prepend(data);
+                    })
+                    // show the "show more" button, place it in loop above
+                fetch(chrome.runtime.getURL('src/load-more-products.html'))
+                    .then(response => response.text())
+                    .then(data => {
+                        $(  "body" ).prepend(data);
+                    })
+
         }
         console.log(request); //log in general site inspector
         sendResponse({

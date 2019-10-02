@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+
+<!-- This file contains the three popup boxes on the right side
+that tell the user to click on the icon in the Chrome toolbar to
+filter the free products with WishWiz
+Boxes automatically removes when user scrolls!
+-->
+
+<head>
+    <title>The WishWiz</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.dialog.css" />
+</head>
+
+<body>
+    <style>
+        .modalsyaknow {
+            font-size: 14px;
+            width: 200px;
+            display: fixed;
+            font-family: Verdana;
+            z-index: 1000000;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            /* bring element to the front */
+        }
+
+        .all-modals_ {
+            position: fixed;
+            right: 30px;
+            bottom: 5%;
+            z-index: 1000;
+        }
+
+        .wishwiz-p {
+            margin: 0;
+        }
+
+    </style>
+    <div class="all-modals_" id="all-modals-wishwiz_">
+            <div class="modal-dialog modalsyaknow" id="modal-wishwiz-r-nt" role="dialog">
+                <div class="modal-content">
+                    <a href="#" onclick="closeDialognt()"></a>
+                    <div class="modal-body center-block">
+                        <p class="wishwiz-p">Please open the products in a new tab, otherwise the side will reload 😒</p>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <!--<script src="js/jquery.min.js"></script>-->
+    <script>
+        function closeDialognt() {
+            document.getElementById("modal-wishwiz-r-nt").style.display = "none";
+        }
+    </script>
+</body>
+
+</html>

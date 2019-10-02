@@ -31,6 +31,8 @@
     "web_accessible_resources": [
         "src/popup.html",
         "src/popup-right-notice.html",
+        "src/popup-right-notice-new-tab.html",
+        "src/load-more-products.html",
         "src/js/*",
         "src/icons/*",
         "src/css/*"
