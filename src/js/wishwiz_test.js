@@ -1,3 +1,6 @@
+/* Random code for testing and trial and error by Manu/Moon */
+
+
 //Gets All Elements and filters
 function filterElements(itemsList, rangeFrom, rangeTo) {
   //rangeFrom = 0;

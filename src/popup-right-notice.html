@@ -1,6 +1,12 @@
 <!doctype html>
 <html>
 
+<!-- This file contains the three popup boxes on the right side
+that tell the user to click on the icon in the Chrome toolbar to
+filter the free products with WishWiz
+Boxes automatically removes when user scrolls!
+-->
+
 <head>
     <title>The WishWiz</title>
     <!-- Required meta tags -->
@@ -109,6 +115,7 @@
             closeDialogR3();
         }
 
+        // Removes all the boxes when the user starts scrolling
         window.onscroll = function () {
             closeDialogR1();
             closeDialogR2();

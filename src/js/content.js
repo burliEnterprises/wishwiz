@@ -30,7 +30,7 @@ $( document ).ready(function() {
 });
 
 
-
+// If Button is clicked, popup.js sends message to this file, right here:
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
         var path = chrome.runtime.getURL('src/css/bootstrap.min.dialog.css');

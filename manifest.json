@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "author": "Burli & Moon36",
     "manifest_version": 2,
-    "description": "A extension that finds all the free items of your query on the awesome marketplace wish.com",
+    "description": "Filter for free products on the marketplace wish.com",
     "homepage_url": "https://burli.biz/wishwiz",
     "icons": {
         "16": "src/icons/icon16.png",
