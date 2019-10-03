@@ -4,29 +4,27 @@
 
 Cheap products are awesome. But what's even better than cheap products? Free products.
 That's why we decided to make _The WishWiz_, a Chrome extension that filters and displays all free products on the marketplace Wish.
+Be free to use our code, have fun with it :)
 
 ------------------------------------------------------------
 
-## ToDo:
+## Moving Forward:
 
-- How many Items are shown? Reloading when user scrolls? Button "show more"?
+- Implement Button "show more", show even more free productsPerRow
+- Products must be opened in a new tab by now, otherwise site reloads and free products are gone
+- If user scrolls to far down, Wish reorders the products, free ones not on top anymore
 
 -------------------------------------------------------------
 
-## Resolved:
+## Features:
 
-- Don't override all elements when new ones are found in getFreeStuff(), add them to the List
---> otherwise DOM gets too big and elements on top are left out when new ones join the List
-
-- only enable extension on the site wish.com
-
-- Site needs to reload for extension to more --> changed Manifest, working now
-
-- price filter --> user decides the max. price
+- Filter free products and show them on top of ProductGrid__ProductGridRow
+- Choose a max price for filter, enables the user to not only see the free products
+- Tooltips and progress bar for UX
 
 ------------------------------------------------------------
 
-## Limits:
+## Limits for developers:
 
 - It is not possible to automatically open the extension dialog when "Wish" is loaded.
 --> Google doesn't allow this:
