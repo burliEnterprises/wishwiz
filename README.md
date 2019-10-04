@@ -29,3 +29,7 @@ Be free to use our code, have fun with it :)
 - It is not possible to automatically open the extension dialog when "Wish" is loaded.
 --> Google doesn't allow this:
 https://stackoverflow.com/questions/14272707/google-chrome-extension-how-to-generate-a-browser-action-without-clicking
+
+------------------------------------------------------------
+
+Made with ❤️ by Burli (Matteo) and Moon36 (Manuel)
