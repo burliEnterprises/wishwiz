@@ -1,0 +1,4 @@
+Version 1.1.0
+
+*** Fixed bug, where Userinput can be < 0
+*** Fixed bug, where multiple popups are shown when filter-button is pressed multiple times
