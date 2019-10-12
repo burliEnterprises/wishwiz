@@ -11,7 +11,7 @@ chrome.runtime.sendMessage({ onTarget: true });
 
 // standard
 $( document ).ready(function() {
-    var path = chrome.runtime.getURL('src/css/bootstrap.min.dialog.css');
+    let path = chrome.runtime.getURL('src/css/bootstrap.min.dialog.css');
     $('head').append($('<link>')
         .attr("rel", "stylesheet")
         .attr("type", "text/css")
@@ -29,11 +29,12 @@ $( document ).ready(function() {
 
 });
 
+let allowRun = true;
 
 // If Button is clicked, popup.js sends message to this file, right here:
 chrome.runtime.onMessage.addListener(
     function(request, sender, sendResponse) {
-        var path = chrome.runtime.getURL('src/css/bootstrap.min.dialog.css');
+        let path = chrome.runtime.getURL('src/css/bootstrap.min.dialog.css');
         $('head').append($('<link>')
             .attr("rel", "stylesheet")
             .attr("type", "text/css")
@@ -47,7 +48,9 @@ chrome.runtime.onMessage.addListener(
         if (request["currentUrl"].includes("product")) {
             // filtern nicht ausfuehren wenn ein einzelprodukt angezeigt wird.
             alert("Sorry, we can't filter on a single product page :(");
-        } else {
+        } else if (allowRun) {
+            //Prevents script from being run multiple times at once if user 'spams' Filter-Button
+            allowRun = false;
             fetch(chrome.runtime.getURL('src/popup.html'))
                 .then(response => response.text())
                 .then(data => {
@@ -86,7 +89,7 @@ chrome.runtime.onMessage.addListener(
                             // check if product is cheaper than max price set by the user in input:
 
                             console.log("itemprice " + itemPriceText);
-                            if (itemPriceText <= parseInt(_inputUserMaxPrice)) {
+                            if (itemPriceText <= parseInt(Math.abs(_inputUserMaxPrice))) {
                                 onlyFreeProductsArray.push(_singleProductsArray[i]);
                             }
 
@@ -95,9 +98,11 @@ chrome.runtime.onMessage.addListener(
                     }
 
                     //util sleep function, not needed --> done via interval
+                    /*
                     const sleep = (milliseconds) => {
                         return new Promise(resolve => setTimeout(resolve, milliseconds))
                     }
+                    */
 
                     //Returns all the single free products in one array:
                     function grabFreeProducts(_inputUserMaxPrice) {
@@ -106,7 +111,7 @@ chrome.runtime.onMessage.addListener(
                         console.log("how many free products found? " + myFreeStuff.length);
                         if (myFreeStuff.length < howManyFreeProductsYouWant) {
                             window.scrollBy(0, document.body.scrollHeight);
-                            /*    sleep(1000).then(function() { // unsauber as fuck, multiple threads? prolly, implemented in a interval now
+                            /*    sleep(1000).then(function() { // unsauber as fuck, multiple threads? Implemented in a interval now
                                     console.log("Total Height: " +   document.body.scrollHeight);
                                     grabFreeProducts();
                                 }) */
@@ -183,6 +188,10 @@ chrome.runtime.onMessage.addListener(
 
                                     }
                                 };
+
+                                //Allow filter-algorithm to be run again
+                                allowRun = true;
+
                                 console.log("Congrats, the free products are shown on top. Probs to the developers :)") // it is what it is
                                 location.href="javascript:dismissTheBar(); void 0";     // swerve, progress bar
                             clearInterval(hure);
@@ -211,7 +220,7 @@ chrome.runtime.onMessage.addListener(
                         $(  "body" ).prepend(data);
                     })
 
-        }
+        } else { console.log('bitch you thought') }
         console.log(request); //log in general site inspector
         sendResponse({
             "farewell": "hola"
